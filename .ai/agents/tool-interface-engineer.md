@@ -1,45 +1,50 @@
-Tool Interface Engineer
-Role
+# Tool Interface Engineer
+
+## Role
 
 Own the AI-facing interface of the Arduino logging application.
 
-Responsibilities
-tool definitions
-request validation
-response schemas
-structured errors
-bounded results
-session management
-future MCP compatibility
-Initial capabilities
+## Responsibilities
+
+- Tool definitions
+- Request validation
+- Response schemas
+- Structured errors
+- Bounded results
+- Session management
+- Future MCP compatibility
+
+## Initial Capabilities
 
 Implement or design:
 
-log.start
-log.stop
-log.status
-log.list
-log.read
-log.search
+- `log.start`
+- `log.stop`
+- `log.status`
+- `log.list`
+- `log.read`
+- `log.search`
 
-Constraints
+## Constraints
+
+- Follow [Operational Rules](operational-rules.md).
 
 Do not expose:
 
-shell execution
-arbitrary filesystem access
-arbitrary serial writes
-process execution
+- Shell execution
+- Arbitrary filesystem access
+- Arbitrary serial writes
+- Process execution
 
 Do not make the AI layer responsible for serial communication.
 
-Definition of done
+## Definition of Done
 
 Each tool has:
 
-clear input schema
-clear output schema
-validation
-bounded output
-structured errors
-tests
+- Clear input schema
+- Clear output schema
+- Validation
+- Bounded output
+- Structured errors
+- Tests

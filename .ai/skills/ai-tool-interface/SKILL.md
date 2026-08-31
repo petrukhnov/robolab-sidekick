@@ -1,143 +1,136 @@
-AI Tool Interface Skill
-Purpose
+# AI Tool Interface Skill
+
+## Purpose
 
 Use this skill when implementing the interface between the Arduino logging application and an AI harness.
 
-Principle
+## Principle
 
 Expose semantic debugging capabilities rather than infrastructure primitives.
 
-Good:
+**Good:**
+- `log.status`
+- `log.search`
+- `log.read`
 
-log.status
-log.search
-log.read
+**Bad:**
+- `filesystem.read`
+- `shell.execute`
+- `serial.write`
 
-
-Bad:
-
-filesystem.read
-shell.execute
-serial.write
-
-Initial tools
+## Initial Tools
 
 Implement or design toward:
 
-log.start
+### `log.start`
 
 Starts a serial logging session.
 
-Inputs:
+**Inputs:**
+- `port`
+- `baudRate`
 
-port
-baudRate
+**Returns:**
+- `sessionId`
+- `status`
+- `port`
+- `baudRate`
+- `startedAt`
 
-
-Returns:
-
-sessionId
-status
-port
-baudRate
-startedAt
-
-log.stop
+### `log.stop`
 
 Stops the active logging session.
 
-Returns:
+**Returns:**
+- `sessionId`
+- `status`
+- `stoppedAt`
+- `linesReceived`
 
-sessionId
-status
-stoppedAt
-linesReceived
-
-log.status
+### `log.status`
 
 Returns the current logger state.
 
-log.list
+### `log.list`
 
-Lists available log sessions.
+Lists available log sessions. Support bounded results.
 
-Support bounded results.
-
-log.read
+### `log.read`
 
 Reads a bounded section of a log.
 
-Support:
+**Support:**
+- Session ID
+- Start position or time
+- Maximum entries
 
-session ID
-start position or time
-maximum entries
+*Never return an unbounded log.*
 
-Never return an unbounded log.
-
-log.search
+### `log.search`
 
 Searches captured logs.
 
-Support:
+**Support:**
+- Session ID
+- Text query
+- Optional start time
+- Optional end time
+- Result limit
 
-session ID
-text query
-optional start time
-optional end time
-result limit
-AI-oriented responses
+## AI-Oriented Responses
 
 Responses should be:
-
-structured
-bounded
-deterministic
-concise
-easy for a model to interpret
+- Structured
+- Bounded
+- Deterministic
+- Concise
+- Easy for a model to interpret
 
 Avoid returning huge blobs.
 
-For example:
+**Example:**
 
+```json
 {
-"sessionId": "abc123",
-"matchCount": 3,
-"truncated": false,
-"entries": [
-{
-"timestamp": "...",
-"sequence": 120,
-"rawMessage": "ERROR MOTOR TIMEOUT"
+  "sessionId": "abc123",
+  "matchCount": 3,
+  "truncated": false,
+  "entries": [
+    {
+      "timestamp": "...",
+      "sequence": 120,
+      "rawMessage": "ERROR MOTOR TIMEOUT"
+    }
+  ]
 }
-]
-}
+```
 
-Errors
+## Errors
 
 Return machine-readable error codes plus human-readable messages.
 
-Example:
+**Example:**
 
+```json
 {
-"error": {
-"code": "LOGGER_NOT_RUNNING",
-"message": "No serial logging session is currently active."
+  "error": {
+    "code": "LOGGER_NOT_RUNNING",
+    "message": "No serial logging session is currently active."
+  }
 }
-}
+```
 
-Safety
+## Safety
 
 The AI tool interface must not provide arbitrary:
-
-shell commands
-filesystem access
-serial writes
-process execution
+- Shell commands
+- Filesystem access
+- Serial writes
+- Process execution
 
 unless explicitly added as a separately reviewed capability.
 
-Future compatibility
+## Future Compatibility
 
 Keep tool names and semantics stable.
 

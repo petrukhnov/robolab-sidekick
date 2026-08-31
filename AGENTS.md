@@ -10,3 +10,5 @@ Here is a list of projects:
 
 Agent skills and other harness-related files are located in folder [.ai](.ai)
 
+* [operational-rules.md](.ai/agents/operational-rules.md)
+

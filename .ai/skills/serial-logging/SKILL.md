@@ -1,72 +1,69 @@
-Serial Logging Skill
-Purpose
+# Serial Logging Skill
+
+## Purpose
 
 Use this skill when implementing Arduino serial communication and log capture.
 
-Responsibility
+## Responsibility
 
 The serial subsystem is responsible only for:
-
-locating/opening a serial connection
-configuring baud rate and required serial settings
-reading serial data
-detecting connection/read failures
-closing the connection
+- Locating/opening a serial connection
+- Configuring baud rate and required serial settings
+- Reading serial data
+- Detecting connection/read failures
+- Closing the connection
 
 It must not own log-file formatting or AI tool behavior.
 
-Abstraction
+## Abstraction
 
 Use a project-owned interface for serial communication.
 
-Example:
+**Example:**
 
+```kotlin
 interface SerialConnection {
-fun connect()
-fun disconnect()
-fun isConnected(): Boolean
-fun readLine(): String?
+    fun connect()
+    fun disconnect()
+    fun isConnected(): Boolean
+    fun readLine(): String?
 }
-
+```
 
 The exact interface may evolve, but third-party serial APIs must remain behind an adapter.
 
-Serial configuration
+## Serial Configuration
 
 At minimum support:
-
-port
-baud rate
+- Port
+- Baud rate
 
 Keep room for:
-
-data bits
-stop bits
-parity
-flow control
+- Data bits
+- Stop bits
+- Parity
+- Flow control
 
 Do not expose unnecessary configuration until required.
 
-Input handling
+## Input Handling
 
-Preserve the original Arduino line.
-
-Do not:
-
-trim meaningful content
-change character case
-parse messages in the serial layer
-infer log severity
-infer telemetry
+Preserve the original Arduino line. Do not:
+- Trim meaningful content
+- Change character case
+- Parse messages in the serial layer
+- Infer log severity
+- Infer telemetry
 
 If line termination is removed by the reader, document that behavior.
 
-Lifecycle
+## Lifecycle
 
 Connection state must be explicit.
 
-Expected lifecycle:
+**Expected lifecycle:**
 
+```text
 DISCONNECTED
 │
 ▼
@@ -79,41 +76,32 @@ CONNECTED
 │
 ▼
 DISCONNECTED / FAILED
-
+```
 
 Shutdown must close the underlying serial resource.
 
-Failures
+## Failures
 
 Handle explicitly:
+- Port does not exist
+- Permission denied
+- Port already in use
+- Connection failure
+- Unexpected disconnection
+- Read failure
+- Malformed byte input
 
-port does not exist
-permission denied
-port already in use
-connection failure
-unexpected disconnection
-read failure
-malformed byte input
+Do not silently retry forever. If automatic reconnect is introduced later, make it an explicit application feature with bounded retry behavior.
 
-Do not silently retry forever.
+## Testing
 
-If automatic reconnect is introduced later, make it an explicit application feature with bounded retry behavior.
+Provide a fake serial implementation. Tests should be able to inject:
+- `BOOT`
+- `READY`
+- `ERROR MOTOR TIMEOUT`
 
-Testing
+and verify the resulting `LogEntry` objects without hardware.
 
-Provide a fake serial implementation.
+## Hardware Independence
 
-Tests should be able to inject:
-
-BOOT
-READY
-ERROR MOTOR TIMEOUT
-
-
-and verify the resulting LogEntry objects without hardware.
-
-Hardware independence
-
-The normal test suite must run without an Arduino connected.
-
-Hardware-dependent tests must be clearly separated from unit/integration tests.
+The normal test suite must run without an Arduino connected. Hardware-dependent tests must be clearly separated from unit/integration tests.
