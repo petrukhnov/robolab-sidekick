@@ -3,3 +3,9 @@
 
 .gradle
 bin
+.build
+.kotlin
+
+*.log
+*.len
+*.class
