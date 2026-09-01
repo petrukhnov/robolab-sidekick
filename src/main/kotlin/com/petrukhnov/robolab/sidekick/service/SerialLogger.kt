@@ -84,6 +84,8 @@ class SerialLogger(
 
     fun isRunning(): Boolean = running.get()
 
+    fun getSequenceNumber(): Long = sequenceNumber.get()
+
     fun getStatus(): LoggerStatus {
         return if (running.get()) {
             LoggerStatus.Running(config.serialPort, sequenceNumber.get())

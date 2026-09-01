@@ -1,11 +1,28 @@
+
+# Intellj idea
 .idea
 .iml
 
+
+# kotlin/jvm
 .gradle
-bin
-.build
 .kotlin
 
-*.log
-*.len
+
+# builds
+bin
+build
+.build
 *.class
+*.len
+
+# logs
+manual-logs
+*.log
+*.jsonl
+
+
+# AI
+.claude
+.codex
+.junie
