@@ -43,6 +43,15 @@ class LogTool(private val loggingService: LoggingService) {
         }
     }
 
+    fun listPorts(): String {
+        return try {
+            val result = loggingService.listPorts()
+            json.encodeToString(result)
+        } catch (e: Exception) {
+            json.encodeToString(ErrorResponse(ErrorDetail("LIST_PORTS_FAILED", e.message ?: "Unknown error")))
+        }
+    }
+
     fun read(sessionId: String, limit: Int = 100, offset: Long = 0): String {
         return try {
             val result = loggingService.readLog(sessionId, limit, offset)

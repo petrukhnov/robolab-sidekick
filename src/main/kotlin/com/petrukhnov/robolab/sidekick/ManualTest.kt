@@ -3,6 +3,7 @@ package com.petrukhnov.robolab.sidekick
 import com.petrukhnov.robolab.sidekick.api.LogTool
 import com.petrukhnov.robolab.sidekick.config.AppConfig
 import com.petrukhnov.robolab.sidekick.infrastructure.serial.JSerialCommConnection
+import com.petrukhnov.robolab.sidekick.infrastructure.serial.JSerialCommPortProvider
 import com.petrukhnov.robolab.sidekick.service.LoggingService
 import com.fazecast.jSerialComm.SerialPort
 import kotlin.system.exitProcess
@@ -32,7 +33,7 @@ fun main(args: Array<String>) {
     }
 
     val config = AppConfig(serialPort = portName, baudRate = baudRate, storagePath = "manual-logs")
-    val loggingService = LoggingService(config) { p, b -> JSerialCommConnection(p, b) }
+    val loggingService = LoggingService(config, { p, b -> JSerialCommConnection(p, b) }, JSerialCommPortProvider())
     val logTool = LogTool(loggingService)
 
     println("Starting logging on $portName at $baudRate baud...")

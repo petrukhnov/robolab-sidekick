@@ -2,8 +2,14 @@ package com.petrukhnov.robolab.sidekick.api
 
 import com.petrukhnov.robolab.sidekick.domain.InstantSerializer
 import com.petrukhnov.robolab.sidekick.domain.LogEntry
+import com.petrukhnov.robolab.sidekick.infrastructure.PortInfo
 import kotlinx.serialization.Serializable
 import java.time.Instant
+
+@Serializable
+data class PortListResponse(
+    val ports: List<PortInfo>
+)
 
 @Serializable
 data class SessionInfo(

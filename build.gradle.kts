@@ -2,10 +2,11 @@ plugins {
     kotlin("jvm") version "2.3.0"
     kotlin("plugin.serialization") version "2.3.0"
     application
+    id("com.gradleup.shadow") version "9.6.1"
 }
 
 application {
-    mainClass.set("com.petrukhnov.robolab.sidekick.ManualTestKt")
+    mainClass.set("com.petrukhnov.robolab.sidekick.MainKt")
 }
 
 group = "com.petrukhnov"
@@ -20,6 +21,8 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.9")
     implementation("ch.qos.logback:logback-classic:1.4.14")
     implementation("com.fazecast:jSerialComm:2.11.0")
+    implementation("io.modelcontextprotocol:kotlin-sdk:0.15.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.6.0")
     
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")

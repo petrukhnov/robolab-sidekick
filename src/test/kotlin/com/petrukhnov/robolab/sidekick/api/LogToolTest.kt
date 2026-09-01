@@ -1,6 +1,8 @@
 package com.petrukhnov.robolab.sidekick.api
 
 import com.petrukhnov.robolab.sidekick.config.AppConfig
+import com.petrukhnov.robolab.sidekick.infrastructure.PortInfo
+import com.petrukhnov.robolab.sidekick.infrastructure.PortProvider
 import com.petrukhnov.robolab.sidekick.infrastructure.fake.FakeSerialConnection
 import com.petrukhnov.robolab.sidekick.service.LoggingService
 import kotlinx.serialization.json.Json
@@ -20,7 +22,12 @@ class LogToolTest {
     fun `should perform full logging lifecycle`() {
         val config = AppConfig(serialPort = "COM1", storagePath = tempDir.toString())
         val serial = FakeSerialConnection()
-        val loggingService = LoggingService(config) { _, _ -> serial }
+        val portProvider = object : PortProvider {
+            override fun listPorts(): List<PortInfo> = listOf(
+                PortInfo("COM1", "Fake Port", "A fake port for testing", false)
+            )
+        }
+        val loggingService = LoggingService(config, { _, _ -> serial }, portProvider)
         val logTool = LogTool(loggingService)
 
         // 1. Check status (idle)

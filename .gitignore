@@ -5,14 +5,14 @@
 
 
 # kotlin/jvm
-.gradle
-.kotlin
+.gradle/
+.kotlin/
 
 
 # builds
-bin
-build
-.build
+bin/
+build/
+.build/
 *.class
 *.len
 
@@ -23,6 +23,6 @@ manual-logs
 
 
 # AI
-.claude
-.codex
-.junie
+.claude/
+.codex/
+.junie/

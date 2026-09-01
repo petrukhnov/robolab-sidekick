@@ -3,6 +3,7 @@ package com.petrukhnov.robolab.sidekick.service
 import com.petrukhnov.robolab.sidekick.api.*
 import com.petrukhnov.robolab.sidekick.config.AppConfig
 import com.petrukhnov.robolab.sidekick.infrastructure.LogReader
+import com.petrukhnov.robolab.sidekick.infrastructure.PortProvider
 import com.petrukhnov.robolab.sidekick.infrastructure.SerialConnection
 import com.petrukhnov.robolab.sidekick.infrastructure.storage.JsonlLogReader
 import com.petrukhnov.robolab.sidekick.infrastructure.storage.JsonlLogWriter
@@ -12,7 +13,8 @@ import java.util.*
 
 class LoggingService(
     private val config: AppConfig,
-    private val serialConnectionFactory: (port: String, baudRate: Int) -> SerialConnection
+    private val serialConnectionFactory: (port: String, baudRate: Int) -> SerialConnection,
+    private val portProvider: PortProvider
 ) {
     private var currentLogger: SerialLogger? = null
     private var currentSessionId: String? = null
@@ -76,6 +78,10 @@ class LoggingService(
 
     fun listLogs(): LogListResponse {
         return LogListResponse(logReader.listLogs())
+    }
+
+    fun listPorts(): PortListResponse {
+        return PortListResponse(portProvider.listPorts())
     }
 
     fun readLog(sessionId: String, limit: Int, offset: Long): LogReadResponse {
