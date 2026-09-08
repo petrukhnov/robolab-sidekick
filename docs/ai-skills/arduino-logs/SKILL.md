@@ -11,7 +11,7 @@ Use this skill when working with an Arduino board connected through a Linux seri
 
 ## Purpose
 
-This skill provides Junie with a reliable workflow for:
+This skill provides AI Client with a reliable workflow for:
 
 - discovering connected Arduino serial ports;
 - starting and stopping Arduino logging sessions;
@@ -53,13 +53,13 @@ Logs are stored as JSON lines:
 
 ## Interactive Arduino Testing
 
-When a task requires interaction with the physical Arduino, Junie should take
+When a task requires interaction with the physical Arduino, AI Client should take
 the lead in coordinating the interaction rather than requiring the user to
 describe every physical action through chat.
 
 ### Principle
 
-Junie should:
+AI Client should:
 
 1. Start or reuse an Arduino logging session.
 2. Tell the user exactly what physical action to perform.
@@ -77,7 +77,7 @@ The user should not need to report actions such as:
 - "I pressed it again."
 - "I waited two seconds."
 
-Instead, Junie should explicitly instruct the user when an action is required
+Instead, AI Client should explicitly instruct the user when an action is required
 and use the Arduino logs to determine when the Arduino observed that action.
 
 ### Interactive Test Protocol
@@ -179,7 +179,7 @@ Then continue monitoring the logs.
 
 ### Event Detection
 
-Junie should prefer explicit firmware events when available.
+AI Client should prefer explicit firmware events when available.
 
 For example, if the firmware produces:
 
@@ -189,7 +189,7 @@ BUTTON LEFT PRESSED
 
 use that event to detect the interaction.
 
-If explicit events are unavailable, Junie may infer an interaction from
+If explicit events are unavailable, AI Client may infer an interaction from
 related state changes, but must clearly distinguish an inference from a
 directly observed event.
 
@@ -243,7 +243,7 @@ logger and available evidence.
 
 The user may physically interact with the Arduino at any time.
 
-However, Junie should only consider an action part of the current test when
+However, AI Client should only consider an action part of the current test when
 there is corresponding evidence in the Arduino logs.
 
 The log is the source of truth for whether the Arduino detected the action.
@@ -252,11 +252,11 @@ The log is the source of truth for whether the Arduino detected the action.
 
 For a button test:
 
-**Junie:**
+**AI Client:**
 - Start logging.
 - Inspect idle state.
 
-**Junie:**
+**AI Client:**
 > "Press the LEFT button once now."
 
 *[monitor MCP logs]*
@@ -266,7 +266,7 @@ For a button test:
 BUTTON LEFT PRESSED
 ```
 
-**Junie:**
+**AI Client:**
 > "Detected LEFT button press."
 
 *[read subsequent events]*
@@ -277,7 +277,7 @@ MOTOR LEFT ENABLED
 MOTOR LEFT CURRENT: 1.82A
 ```
 
-**Junie:**
+**AI Client:**
 > "The button press was detected. The firmware enabled the left motor 38 ms later. Now release the button."
 
 *[monitor MCP logs]*
@@ -287,14 +287,14 @@ MOTOR LEFT CURRENT: 1.82A
 BUTTON LEFT RELEASED
 ```
 
-**Junie:**
+**AI Client:**
 > "Detected LEFT button release. The motor was disabled 12 ms later."
 
 ### Important
 
-When an interactive hardware test is in progress, Junie should remain
+When an interactive hardware test is in progress, AI Client should remain
 focused on the test and monitor the Arduino logs rather than immediately
 ending the task after giving the user an instruction.
 
-The purpose of the interaction is to let Junie coordinate the physical test
+The purpose of the interaction is to let AI Client coordinate the physical test
 and observe its consequences through MCP.
