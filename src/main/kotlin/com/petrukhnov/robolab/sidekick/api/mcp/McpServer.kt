@@ -121,5 +121,8 @@ class McpServer(private val loggingService: LoggingService) {
     fun start() = runBlocking {
         val transport = StdioServerTransport(System.`in`.asSource().buffered(), System.out.asSink().buffered()) {}
         server.createSession(transport)
+        kotlinx.coroutines.awaitCancellation()
+        @Suppress("UNREACHABLE_CODE")
+        Unit
     }
 }
